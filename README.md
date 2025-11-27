@@ -1,62 +1,91 @@
-# Computer Graphics: Lighting and Transformations (Exam 2)
+# Gráfica por Computadora: Iluminación y Transformaciones (Parcial 2)
 
-This repository contains the practical implementation for the Second Partial Exam of the Computer Graphics course. The solution utilizes C++ and OpenGL 3.3 to demonstrate advanced lighting models, spotlight attenuation, and specular reflection properties.
+Este repositorio contiene la implementación práctica para el Segundo Examen Parcial del curso de Gráfica por Computadora. La solución utiliza C++ y OpenGL 3.3 para demostrar modelos avanzados de iluminación, atenuación de reflectores (spotlights) y propiedades de reflexión especular.
 
-By:
+**Realizado por:**
 - Bruno Daniel Pérez Vargas
 - Fernando Villalobos Betancourt
 
-## Technologies Used
+## Tecnologías Utilizadas
 
 * **IDE:** Visual Studio 2022
-* **Language:** C++
+* **Lenguaje:** C++
 * **API:** OpenGL 3.3 Core Profile
-* **Dependencies:**
-    * GLFW (Windowing and Input)
-    * GLAD (OpenGL Loading Library)
-    * GLM (OpenGL Mathematics)
-    * stb_image (Texture Loading)
+* **Dependencias:**
+    * GLFW (Ventanas y Entradas)
+    * GLAD (Carga de funciones OpenGL)
+    * GLM (Matemáticas para OpenGL)
+    * stb_image (Carga de Texturas)
 
-## Projects Overview
+## Resumen de Proyectos
 
-The solution is divided into two distinct projects:
+La solución se divide en dos proyectos distintos:
 
-### 1. Question1: Spotlight Attenuation Analysis
+### 1. Pregunta 1: Análisis de Atenuación de Reflector (Spotlight)
 
-**Objective:** Implement a fixed spotlight targeting a specific object in the scene and analyze the effect of linear attenuation on light edge softness.
+**Objetivo:** Implementar un reflector fijo apuntando a un objeto específico en la escena y analizar el efecto de la atenuación lineal en la suavidad de los bordes de la luz.
 
-**Key Implementation Details:**
-* **Targeting:** The spotlight direction is dynamically calculated to strictly follow the deepest cube in the scene (Z = -15.0f).
-* **Attenuation:** The linear attenuation coefficient (`light.linear`) is manipulated to alter the visual hardness of the spotlight's edge.
+**Detalles Clave de Implementación:**
+* **Apuntado:** La dirección del reflector se calcula dinámicamente para seguir estrictamente al cubo más profundo en la escena (Z = -15.0f).
+* **Atenuación:** Se manipula el coeficiente de atenuación lineal (`light.linear`) para alterar la dureza visual del borde del reflector.
 
-**Reproduction Steps:**
-To replicate the exam requirements, modify the `linearAttenuation` variable in `main.cpp` (Line ~45):
+**Explicación del Fenómeno:**
+[cite_start]Para lograr que el borde de la luz se desvanezca suavemente en lugar de cortarse abruptamente, se modificó el coeficiente de atenuación lineal[cite: 5]. [cite_start]Al aumentar este valor, incrementamos la rapidez con la que la luz pierde intensidad conforme viaja[cite: 6]. [cite_start]Esto causa que la intensidad luminosa llegue a cero antes de alcanzar el límite físico angular del reflector[cite: 7]. [cite_start]Al no haber luz visible llegando al borde del cono, el corte duro desaparece visualmente, creando un gradiente natural hacia la oscuridad[cite: 8].
 
-1.  **Hard Edge Transition:**
-    * Set `float linearAttenuation = 0.09f;`
-    * *Result:* The spotlight projects a clear, defined circle on the object.
-2.  **Soft Edge Transition:**
-    * Set `float linearAttenuation = 0.7f;`
-    * *Result:* The light intensity decays rapidly before reaching the cut-off angle, creating a smooth fade-out effect.
+**Pasos para Reproducir:**
+Para replicar los requerimientos del examen, modifique la variable `linearAttenuation` en `main.cpp` (Línea ~45):
 
----
+1.  **Transición de Borde Duro:**
+    * Configurar: `float linearAttenuation = 0.09f;`
+    * *Resultado:* El reflector proyecta un círculo claro y definido sobre el objeto.
+    * **Evidencia:**
+      ![Captura Borde Duro](ruta/a/tu/imagen_duro.png)
 
-### 2. Question2: Specular Saturation and Animation
-
-**Objective:** Render a scene with multiple light sources and rotating objects to demonstrate the impact of the shininess coefficient on color saturation.
-
-**Key Implementation Details:**
-* **Animation:** Cubes rotate continuously based on `glfwGetTime()`.
-* **Specular Reflection:** The material's shininess property is manipulated to simulate extreme specular intensity, resulting in color loss (whitening).
-
-**Reproduction Steps:**
-To replicate the video requirements, modify the `shininessValue` variable in `main.cpp` (Line ~40):
-
-1.  **Standard Lighting:**
-    * Set `float shininessValue = 32.0f;`
-    * *Result:* Standard specular highlights typical of plastic or semi-polished materials.
-2.  **Specular Saturation (Color Loss):**
-    * Set `float shininessValue = 0.04f;`
-    * *Result:* The specular component expands to cover the majority of the surface, overpowering the diffuse color and causing the object to appear bright white/metallic.
+2.  **Transición de Borde Suave:**
+    * Configurar: `float linearAttenuation = 0.7f;`
+    * *Resultado:* La intensidad de la luz decae rápidamente antes de llegar al ángulo de corte, creando un efecto de desvanecimiento suave.
+    * **Evidencia:**
+      ![Captura Borde Suave](ruta/a/tu/imagen_suave.png)
 
 ---
+
+### 2. Pregunta 2: Saturación Especular y Animación
+
+**Objetivo:** Renderizar una escena con múltiples fuentes de luz y objetos rotando para demostrar el impacto del coeficiente de brillo (*shininess*) en la saturación del color.
+
+**Detalles Clave de Implementación:**
+* **Animación:** Los cubos rotan continuamente basándose en `glfwGetTime()`.
+* **Reflexión Especular:** La propiedad de brillo (*shininess*) del material se manipula para simular una intensidad especular extrema, resultando en pérdida de color (blanqueamiento).
+
+**Explicación del Fenómeno:**
+[cite_start]Para lograr que el efecto de reflexión especular causara una máxima pérdida de color, se redujo drásticamente el coeficiente `material.shininess` a un valor de 0.04f[cite: 1]. [cite_start]En el modelo de iluminación Phong, al usar un exponente cercano a cero, el resultado de la potencia se acerca a 1.0 incluso para ángulos de reflexión amplios[cite: 2]. [cite_start]Esto provoca que la luz especular no se concentre en un punto, sino que se distribuya con máxima intensidad sobre casi toda la superficie del cubo orientada a la luz[cite: 3]. [cite_start]Al sumarse este blanco intenso al color difuso del objeto, el color original se satura y el objeto parece perder su color, viéndose mayormente blanco o metálico brillante[cite: 4].
+
+**Pasos para Reproducir:**
+Para replicar los requerimientos de video, modifique la variable `shininessValue` en `main.cpp` (Línea ~40):
+
+1.  **Iluminación Estándar:**
+    * Configurar: `float shininessValue = 32.0f;`
+    * *Resultado:* Brillos especulares estándar, típicos de materiales plásticos o semipulidos.
+    * **Video de Demostración:**
+      [Inserte Enlace de YouTube Aquí]
+
+2.  **Saturación Especular (Pérdida de Color):**
+    * Configurar: `float shininessValue = 0.04f;`
+    * *Resultado:* El componente especular se expande para cubrir la mayoría de la superficie, dominando sobre el color difuso.
+    * **Video de Demostración:**
+      [Inserte Enlace de YouTube Aquí]
+
+---
+## Instrucciones de Construcción (Build)
+
+### Visual Studio 2022
+1. Abrir la solución `ITAM-ComputerGraphics-Exam2.sln`.
+2. Asegurarse de que ambos proyectos estén configurados para **x64**.
+3. Verificar directorios de inclusión y librerías (GLFW, GLAD, GLM).
+4. Establecer el proyecto deseado como "Startup Project" y ejecutar.
+
+### MSYS2 (MinGW64)
+Navegar a la carpeta del proyecto específico vía terminal y ejecutar:
+```bash
+g++ main.cpp glad.c -o main -I. -lglfw3 -lopengl32 -lgdi32
+./main.exe
