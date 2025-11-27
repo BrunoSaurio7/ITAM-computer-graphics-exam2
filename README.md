@@ -2,6 +2,10 @@
 
 This repository contains the practical implementation for the Second Partial Exam of the Computer Graphics course. The solution utilizes C++ and OpenGL 3.3 to demonstrate advanced lighting models, spotlight attenuation, and specular reflection properties.
 
+By:
+- Bruno Daniel Pérez Vargas
+- Fernando Villalobos Betancourt
+
 ## Technologies Used
 
 * **IDE:** Visual Studio 2022
