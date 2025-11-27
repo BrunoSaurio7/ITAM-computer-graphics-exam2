@@ -56,21 +56,3 @@ To replicate the video requirements, modify the `shininessValue` variable in `ma
     * *Result:* The specular component expands to cover the majority of the surface, overpowering the diffuse color and causing the object to appear bright white/metallic.
 
 ---
-
-## Build Instructions
-
-### Visual Studio 2022
-1.  Open `ITAM-ComputerGraphics-Exam2.sln`.
-2.  Ensure both projects (`Question1` and `Question2`) are configured for **x64**.
-3.  Verify that the Include and Library directories point to your local installations of GLFW, GLAD, and GLM.
-4.  Ensure `opengl32.lib` and `glfw3.lib` are linked in the project properties.
-5.  **Important:** Texture files (`.png`) and Shader files (`.vs`, `.fs`) must be present in the working directory of the executable.
-6.  Right-click the desired project and select **Set as Startup Project**.
-7.  Build and Run.
-
-### MSYS2 (MinGW64)
-Navigate to the specific project folder (`Question1` or `Question2`) via terminal and execute:
-
-```bash
-g++ main.cpp glad.c -o main -I. -lglfw3 -lopengl32 -lgdi32
-./main.exe
